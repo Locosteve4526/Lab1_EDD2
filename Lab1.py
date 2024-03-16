@@ -16,6 +16,7 @@ class Tree:
 
     def __init__(self, root: "Node" = None) -> None:
         self.root = root
+        
     
 
 class AVL(Tree):
@@ -23,6 +24,7 @@ class AVL(Tree):
 
     def __init__(self, root: "Node" = None) -> None:
         super().__init__(root)
+        self.n=0
 
     #En esta funcion se calcula el factor de equilibrio de un nodo
     #Apartir de la altura de los subarboles derecho e izquierdo
@@ -151,6 +153,30 @@ class AVL(Tree):
             self.print_tree(node.left, level + 1, prefix="L:")
             self.print_tree(node.right, level + 1, prefix="R:")
 
+    # ATENCION TODO LO QUE ESTA COMENTADO AQUI NO FUNCIONA
+   # def plot_tree(self) -> "gv.Graph":
+        #graph = gv.Graph()
+    
+    # Función auxiliar para agregar nodos y bordes recursivamente
+   # def add_nodes_edges(node, parent_name=None):
+        #nonlocal graph  # Indicar que se utilizará la variable graph del ámbito exterior
+        
+       # if node is not None:
+            # Agregar nodo actual
+           # graph.node(str(node.data))
+            # Agregar borde con el nodo padre
+           # if parent_name is not None:
+                #graph.edge(parent_name, str(node.data))
+            # Recorrer hijos recursivamente
+            #add_nodes_edges(node.left, str(node.data))
+            #add_nodes_edges(node.right, str(node.data))
+    
+    # Llamar a la función auxiliar con el nodo raíz del árbol
+    #add_nodes_edges(self.root)
+    
+   # return graph
+
+
     #metodo de insercion
     def insert(self, elem: Any) -> bool:
         to_insert = Node(elem)
@@ -167,6 +193,7 @@ class AVL(Tree):
                 self.root=self.autobalance(self.root)
                 print("Node inserted:", elem)
                 self.print_tree(self.root)
+                self.n+=1
                 return True
             return False
     #metodo de eliminacion
@@ -257,6 +284,7 @@ def generate_sample_abb() -> "AVL":
 
     return tree
 T = generate_sample_abb()
-T.postorder()
+T.plot_tree().render("arbol_avl", format="png", cleanup=True)
+
 
 
