@@ -1,15 +1,14 @@
-#import graphviz as gv
+import graphviz as gv
 from typing import Any, List, Optional, Tuple,Literal
 from pprint import pprint
 
-FactorE = Literal[-2, -1, 0, 1, 2]
 class Node:
     def __init__(self, data: Any) -> None:
         self.data = data
         self.left: Optional["Node"] = None
         self.right: Optional["Node"] = None
-        self.altura=1
-        self.FE=0
+        self.altura=1 #Este atributo tiene la altura
+        self.FE=0 #Este atributo tiene el facto de equilibrio del nodo
         
         
 
@@ -25,14 +24,15 @@ class AVL(Tree):
     def __init__(self, root: "Node" = None) -> None:
         super().__init__(root)
 
+    #En esta funcion se calcula el factor de equilibrio de un nodo
+    #Apartir de la altura de los subarboles derecho e izquierdo
     def FacEqui(self,node:"Node") -> int:
         if node is None :
             return 0
         node.FE=self.altura(node.right)-self.altura(node.left)
         return node.FE
     
-    
-
+    #Aqui se calcula la altura de un nodo
     def altura(self,node:"Node") -> int:
         if node is None:
             return 0
@@ -48,13 +48,18 @@ class AVL(Tree):
             self.postorder_r(node.right)
             print(node.data, end = ' ')
             print("Mi factor E es",node.FE)
-            
+
+    #Aqui estan todos los metodos de las rotaciones del arbol AVL
+
+    #Esta es simple izquierda       
     @staticmethod
     def SL(node: "Node")-> "Node":
         aux=node.right
         node.right=aux.left
         aux.left=node
         return aux
+    
+    #Esta es simple derecha
     @staticmethod
     def SR( node: "Node")->"Node":
         aux=node.left
@@ -62,15 +67,16 @@ class AVL(Tree):
         aux.right=node
         return aux
         
+    #Esta es doble derecha izquierda
     def DRL(self,node: "Node"):
         node.right=self.SR(node.right)
         return self.SL(node)
-    
+    # Y esta es doble izquierda derecha
     def DLR(self,node: "Node"):
         node.left=self.SL(node.left)
         return self.SR(node)
 
-       
+    #metodo de busqueda
     def search(self, elem: Any) -> Tuple[Optional["Node"], Optional["Node"]]:
         p, pad = self.root, None
         while p is not None:
@@ -84,18 +90,22 @@ class AVL(Tree):
                 p = p.right
         return p, pad
     
+    #Y este es el metodo de autobalanceo, de forma recursiva
     def autobalance(self, node: "Node") -> "Node":
         if node is None:
             return None
-
+        #Aqui llamamos de nuevo a el metodo, pasandole el hijo izquieredo, luego derecho
+        #Para luego realizar el balanceo. Siguiendo un estilo de postorden
         node.left = self.autobalance(node.left)
         node.right=self.autobalance(node.right)
         self.altura(node)
         self.FacEqui(node)
         
-
+        #Aqui empezamos a revisar los factores de balanceo
+        #Para poder saber si es necesario balancear el arbol
         if node.FE == -2:
             if node.left.FE < 0:
+                #Este seria el caso de simple derecha (-2,-1)
                 print("Balancing node:", node.data)
                 print("Before balancing:")
                 self.print_tree(node)
@@ -103,6 +113,7 @@ class AVL(Tree):
                 self.FacEqui(node.right)
                 print("Se hizo un simple righ")
             elif node.left.FE > 0:
+                #Este es el caso de doble izquierda derecha (-2,1)
                 print("Balancing node:", node.data)
                 print("Before balancing:")
                 self.print_tree(node)
@@ -112,6 +123,7 @@ class AVL(Tree):
                 print("Se realizo un double left right")
         elif node.FE == 2:
             if node.right.FE > 0:
+                #Ese es el caso de simple izquierda (2,1)
                 print("Balancing node:", node.data)
                 print("Before balancing:")
                 self.print_tree(node)
@@ -119,27 +131,27 @@ class AVL(Tree):
                 self.FacEqui(node.left)
                 print("Se realizo un simple left")
             elif node.right.FE < 0:
+                #Y este el caso de doble derecha izquierda (2,-1)
                 print("Balancing node:", node.data)
                 print("Before balancing:")
                 self.print_tree(node)
                 node = self.DRL(node)
                 self.FacEqui(node.right)
                 self.FacEqui(node.left)
-                print("Se realizo un double right left")
-                
-        
+                print("Se realizo un double right left")       
         self.altura(node)
         self.FacEqui(node)
         return node
 
-
+    #Esta fue una funcion echa por ChatGpt para mostrar el arbol en la consola
+    #La borramos despues
     def print_tree(self, node: "Node", level=0, prefix="Root:") -> None:
         if node is not None:
             print(" " * (level * 4) + prefix, node.data, f"(FE: {node.FE}, Altura: {node.altura})")
             self.print_tree(node.left, level + 1, prefix="L:")
             self.print_tree(node.right, level + 1, prefix="R:")
 
-
+    #metodo de insercion
     def insert(self, elem: Any) -> bool:
         to_insert = Node(elem)
         if self.root is None:
@@ -157,7 +169,7 @@ class AVL(Tree):
                 self.print_tree(self.root)
                 return True
             return False
-
+    #metodo de eliminacion
     def delete(self, elem: Any, mode: bool = True) -> bool:
         p, pad = self.search(elem)
         if p is not None:
