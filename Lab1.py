@@ -1,6 +1,7 @@
 import graphviz as gv
-from typing import Any, List, Optional, Tuple,Literal
+from typing import Any, List, Optional, Tuple
 from pprint import pprint
+from collections import deque
 
 class Node:
     def __init__(self, data: Any) -> None:
@@ -9,8 +10,21 @@ class Node:
         self.right: Optional["Node"] = None
         self.altura=1 #Este atributo tiene la altura
         self.FE=0 #Este atributo tiene el facto de equilibrio del nodo
-        
-        
+
+#Añadi la clase cola del profesor     
+class Queue:
+
+    def __init__(self) -> None:
+        self.queue: List[Any] = []
+
+    def add(self, elem: Any) -> None:
+        self.queue.append(elem)
+
+    def remove(self) -> Any:
+        return self.queue.pop(0)
+
+    def is_empty(self) -> bool:
+        return len(self.queue) == 0     
 
 class Tree:
 
@@ -300,6 +314,22 @@ class AVL(Tree):
         return p, pad
     
 
+    #Funcion de recorrido por niveles
+    def Recorrido_por_Niveles(self) -> None:
+        if self.root is not None:
+            queue = Queue()
+            queue.add(self.root)
+            self._Recorrido_RC(queue)
+
+    def _Recorrido_RC(self, queue: "Queue") -> None:
+        while not queue.is_empty():
+            node = queue.remove()
+            print(node.data, end=" ")
+            if node.left:
+                queue.add(node.left)
+            if node.right:
+                queue.add(node.right)
+
 def generate_sample_abb() -> "AVL":
     tree = AVL()
     print(tree.insert(8))
@@ -321,11 +351,12 @@ def generate_sample_abb() -> "AVL":
 
     return tree
 T = generate_sample_abb()
-T.delete(10)
-T.delete(8)
-T.pad(15)
-T.abu(15)
-T.tio(3)
+T.Recorrido_por_Niveles()
+#T.delete(10)
+#T.delete(8)
+#T.pad(15)
+#T.abu(15)
+#T.tio(3)
 
 
 
