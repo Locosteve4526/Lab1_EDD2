@@ -168,7 +168,6 @@ class AVL(Tree):
                 #Este seria el caso de simple derecha (-2,-1)
                 print("Balancing node:", node.data)
                 print("Before balancing:")
-                self.print_tree(node)
                 node = self.SR(node)
                 self.FacEqui(node.right)
                 print("Se hizo un simple righ")
@@ -176,7 +175,6 @@ class AVL(Tree):
                 #Este es el caso de doble izquierda derecha (-2,1)
                 print("Balancing node:", node.data)
                 print("Before balancing:")
-                self.print_tree(node)
                 node = self.DLR(node)
                 self.FacEqui(node.right)
                 self.FacEqui(node.left)
@@ -186,7 +184,6 @@ class AVL(Tree):
                 #Ese es el caso de simple izquierda (2,1)
                 print("Balancing node:", node.data)
                 print("Before balancing:")
-                self.print_tree(node)
                 node = self.SL(node)
                 self.FacEqui(node.left)
                 print("Se realizo un simple left")
@@ -194,7 +191,6 @@ class AVL(Tree):
                 #Y este el caso de doble derecha izquierda (2,-1)
                 print("Balancing node:", node.data)
                 print("Before balancing:")
-                self.print_tree(node)
                 node = self.DRL(node)
                 self.FacEqui(node.right)
                 self.FacEqui(node.left)
@@ -202,16 +198,6 @@ class AVL(Tree):
         self.altura(node)
         self.FacEqui(node)
         return node
-
-    #Esta fue una funcion echa por ChatGpt para mostrar el arbol en la consola
-    #La borramos despues
-    def print_tree(self, node: "Node", level=0, prefix="Root:") -> None:
-        if node is not None:
-            print(" " * (level * 4) + prefix, node.data, f"(FE: {node.FE}, Altura: {node.altura})")
-            self.print_tree(node.left, level + 1, prefix="L:")
-            self.print_tree(node.right, level + 1, prefix="R:")
-
-    
 
     #metodo de insercion
     def insert(self, elem: Any) -> bool:
@@ -228,10 +214,10 @@ class AVL(Tree):
                     pad.right = to_insert
                 self.root=self.autobalance(self.root)
                 print("Node inserted:", elem)
-                self.print_tree(self.root)
                 self.n+=1
                 return True
             return False
+        
     def delete(self, elem: Any, mode: bool = True) -> bool:
         # Buscar el nodo a eliminar y su padre
         p, pad = self.search(elem)
@@ -295,7 +281,7 @@ class AVL(Tree):
             # Balancear el árbol después de eliminar el nodo
             self.autobalance(pad)
             # Imprimir el árbol para verificar
-            self.print_tree(self.root)
+            self.graphTree()
             return True
         return False
 
@@ -330,6 +316,26 @@ class AVL(Tree):
             if node.right:
                 queue.add(node.right)
 
+    #Aquí genera como tal el gráfico 
+    def graphTree(self) -> None:
+        tree = gv.Digraph()
+        self._graph(self.root, tree)
+        tree.render("avl_tree", format='png', view=True, cleanup=True)
+
+    #Construye recursivamente la representación visual
+    def _graph(self, root: Optional["Node"], tree: gv.Digraph, level: int = 0) -> None:
+        if root is not None:
+            tree.node(f"{root.data}", label=f"{root.data} (Nivel: {level})")
+
+            if root.left:
+                tree.edge(f"{root.data}", f"{root.left.data}")
+                self._graph(root.left, tree, level + 1)
+
+            if root.right:
+                tree.edge(f"{root.data}", f"{root.right.data}")
+                self._graph(root.right, tree, level + 1)
+    
+
 def generate_sample_abb() -> "AVL":
     tree = AVL()
     print(tree.insert(8))
@@ -357,6 +363,7 @@ T.Recorrido_por_Niveles()
 #T.pad(15)
 #T.abu(15)
 #T.tio(3)
+T.graphTree()
 
 
 
