@@ -92,6 +92,50 @@ class AVL(Tree):
                 p = p.right
         return p, pad
     
+    #Funcion para calcular el padre
+    def pad(self,elem:Any) -> Tuple[Optional["Node"], Optional["Node"]]:
+        p,pad=self.search(elem)
+        if elem == self.root.data:
+            print("El elemento no tiene padre pues es la raiz")
+        else:    
+            if p is not None:
+                print("Yo",pad.data ,"soy el padre de",p.data)
+                return p,pad
+            else:
+                print("No esta en el arbol ")
+                return None,None
+        
+    #funcion para calcular el tio
+    def tio(self,elem:Any)->"Node":
+        pad,abu=self.abu(elem)
+        if abu is not None:
+            if abu.left==pad and abu.right is not None:
+                print("Yo",abu.right.data,"soy el tio de ",elem)
+                return abu.right
+            elif abu.right==pad and abu.left is not None:
+                print("Yo",abu.left.data,"soy el tio de",elem)
+                return abu.left
+            else:
+                print(elem,"No tiene tio")
+        else:
+            print(elem,"es la raiz y no tiene tio")
+            return None
+        
+    #Funcion para calcular el abuelo
+    def abu(self,elem:Any)->Tuple[Optional["Node"], Optional["Node"]]:
+        p,pad=self.pad(elem)
+        if pad is not None:
+            pad,abu=self.pad(pad.data)
+            if abu is not None:
+                print("Yo",abu.data, "soy el abuelo de",elem)
+                return pad,abu
+            else:
+                print(elem,"No tiene abuelo")
+                return None, None
+        else:
+            print(elem,"No tiene abuelo")
+            return None, None
+        
     #Y este es el metodo de autobalanceo, de forma recursiva
     def autobalance(self, node: "Node") -> "Node":
         if node is None:
@@ -279,7 +323,9 @@ def generate_sample_abb() -> "AVL":
 T = generate_sample_abb()
 T.delete(10)
 T.delete(8)
-
+T.pad(15)
+T.abu(15)
+T.tio(3)
 
 
 
