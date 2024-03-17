@@ -153,29 +153,7 @@ class AVL(Tree):
             self.print_tree(node.left, level + 1, prefix="L:")
             self.print_tree(node.right, level + 1, prefix="R:")
 
-    # ATENCION TODO LO QUE ESTA COMENTADO AQUI NO FUNCIONA
-   # def plot_tree(self) -> "gv.Graph":
-        #graph = gv.Graph()
     
-    # Función auxiliar para agregar nodos y bordes recursivamente
-   # def add_nodes_edges(node, parent_name=None):
-        #nonlocal graph  # Indicar que se utilizará la variable graph del ámbito exterior
-        
-       # if node is not None:
-            # Agregar nodo actual
-           # graph.node(str(node.data))
-            # Agregar borde con el nodo padre
-           # if parent_name is not None:
-                #graph.edge(parent_name, str(node.data))
-            # Recorrer hijos recursivamente
-            #add_nodes_edges(node.left, str(node.data))
-            #add_nodes_edges(node.right, str(node.data))
-    
-    # Llamar a la función auxiliar con el nodo raíz del árbol
-    #add_nodes_edges(self.root)
-    
-   # return graph
-
 
     #metodo de insercion
     def insert(self, elem: Any) -> bool:
@@ -196,16 +174,21 @@ class AVL(Tree):
                 self.n+=1
                 return True
             return False
-    #metodo de eliminacion
     def delete(self, elem: Any, mode: bool = True) -> bool:
+        # Buscar el nodo a eliminar y su padre
         p, pad = self.search(elem)
+
+        # Verificar si el nodo a eliminar existe
         if p is not None:
+            # Caso 1: El nodo a eliminar es una hoja
             if p.left is None and p.right is None:
                 if p == pad.left:
                     pad.left = None
                 else:
                     pad.right = None
                 del p
+            
+            # Caso 2: El nodo a eliminar tiene solo un hijo
             elif p.left is not None and p.right is None:
                 if p == pad.left:
                     pad.left = p.left
@@ -218,7 +201,10 @@ class AVL(Tree):
                 else:
                     pad.right = p.right
                 del p
+                
+            # Caso 3: El nodo a eliminar tiene dos hijos
             else:
+                # Utilizar el predecesor en orden o sucesor en orden
                 if mode:
                     pred, pad_pred = self.__pred(p)
                     p.data = pred.data
@@ -247,8 +233,17 @@ class AVL(Tree):
                         else:
                             pad_sus.left = None
                     del sus
+                    
+            # Balancear el árbol después de eliminar el nodo
+            self.autobalance(pad)
+
+            # Imprimir el árbol para verificar
+            self.print_tree(self.root)
+
             return True
         return False
+
+
 
     def __pred(self, node: "Node") -> Tuple["Node", "Node"]:
         p, pad = node.left, node
@@ -284,7 +279,10 @@ def generate_sample_abb() -> "AVL":
 
     return tree
 T = generate_sample_abb()
-T.plot_tree().render("arbol_avl", format="png", cleanup=True)
+T.delete(10)
+
+
+
 
 
 
