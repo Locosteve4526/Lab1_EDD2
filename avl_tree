@@ -1,0 +1,27 @@
+digraph {
+	8 [label="8 (Nivel: 0)"]
+	8 -> 4
+	4 [label="4 (Nivel: 1)"]
+	4 -> 2
+	2 [label="2 (Nivel: 2)"]
+	2 -> 1
+	1 [label="1 (Nivel: 3)"]
+	1 -> 0
+	0 [label="0 (Nivel: 4)"]
+	2 -> 3
+	3 [label="3 (Nivel: 3)"]
+	4 -> 6
+	6 [label="6 (Nivel: 2)"]
+	6 -> 5
+	5 [label="5 (Nivel: 3)"]
+	6 -> 7
+	7 [label="7 (Nivel: 3)"]
+	8 -> 12
+	12 [label="12 (Nivel: 1)"]
+	12 -> 9
+	9 [label="9 (Nivel: 2)"]
+	12 -> 15
+	15 [label="15 (Nivel: 2)"]
+	15 -> 20
+	20 [label="20 (Nivel: 3)"]
+}
