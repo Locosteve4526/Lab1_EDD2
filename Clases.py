@@ -143,7 +143,7 @@ class AVL(Tree):
                 print(elem, "no tiene tío")
                 return None
         else:
-            print(elem, "es la raíz y no tiene tío")
+            print(elem, "no tiene tío")
             return None
 
         
@@ -159,7 +159,7 @@ class AVL(Tree):
                 print(elem, "No tiene abuelo")
                 return None, None
         else:
-            print(elem, "No tiene padre, es la raíz")
+            print(elem, "No tiene padre")
             return None, None
 
     #Funcion para calcular el abuelo
