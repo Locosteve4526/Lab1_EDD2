@@ -482,7 +482,7 @@ while True:
         else:
             print(f"Archivo {name} no encontrado.")
     elif op == "4":
-        # Aquí debes implementar la lógica para buscar nodos según criterios
+        
         type = input("Ingrese el tipo de archivos ")
         min_size = int(input("Ingrese el valor mínimo del peso del archivo "))
         max_size = int(input("Ingrese el valor máximo del peso del archivo "))

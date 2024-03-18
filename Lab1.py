@@ -57,13 +57,16 @@ while True:
         else:
             print(f"Archivo {name} no encontrado.")
     elif op == "4":
-        # Aquí debes implementar la lógica para buscar nodos según criterios
-        type = input("Ingrese el tipo de archivos: ")
-        min = int(input("Ingrese el valor mínimo del peso del archivo: "))  # Convertir a entero
-        max = int(input("Ingrese el valor máximo del peso del archivo: "))  # Convertir a entero
-        result_nodes = T.find_nodes_with_criteria(type, min, max)
-        for node in result_nodes:
-            print(node.data)
+        
+        type = input("Ingrese el tipo de archivos ")
+        min_size = int(input("Ingrese el valor mínimo del peso del archivo "))
+        max_size = int(input("Ingrese el valor máximo del peso del archivo "))
+        result_nodes = T.find_nodes_with_criteria(type, min_size, max_size)
+        if result_nodes:
+            for node in result_nodes:
+                print(node.data)
+        else:
+            print("No se encontraron nodos que cumplan con los criterios especificados.")
     elif op == "5": 
         # Mostrar recorrido por niveles
         print("Recorrido por niveles:")
