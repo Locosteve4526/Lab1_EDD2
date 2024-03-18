@@ -320,17 +320,15 @@ class AVL(Tree):
     def graphTree(self) -> None:
         tree = gv.Digraph()
         self._graph(self.root, tree)
-        tree.render("avl_tree", format='png', view=True, cleanup=True)
+        tree.render("avl_tree", format='png', view=False, cleanup=True)
 
-    #Construye recursivamente la representación visual
+   # Construye recursivamente la representación visual
     def _graph(self, root: Optional["Node"], tree: gv.Digraph, level: int = 0) -> None:
         if root is not None:
             tree.node(f"{root.data}", label=f"{root.data} (Nivel: {level})")
-
             if root.left:
                 tree.edge(f"{root.data}", f"{root.left.data}")
                 self._graph(root.left, tree, level + 1)
-
             if root.right:
                 tree.edge(f"{root.data}", f"{root.right.data}")
                 self._graph(root.right, tree, level + 1)
@@ -358,11 +356,9 @@ def generate_sample_abb() -> "AVL":
     return tree
 T = generate_sample_abb()
 T.Recorrido_por_Niveles()
-#T.delete(10)
-#T.delete(8)
-#T.pad(15)
-#T.abu(15)
-#T.tio(3)
+T.delete(10)
+T.delete(8)
+T.delete(3)
 T.graphTree()
 
 
